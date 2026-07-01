@@ -1,7 +1,6 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <img src="https://github.com/ishaqadhel/docker-laravel-mysql-nginx-starter/assets/49280352/cb88bac9-2517-41fe-805e-b81423e64eca" alt="cover" align="center">
   <h3 align="center">Docker Laravel MySQL Nginx Starter</h3>
   <p align="center">
     Project Starter For Web Application Development with Laravel, MySQL, Nginx, and Docker.
