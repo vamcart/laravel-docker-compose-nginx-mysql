@@ -1,5 +1,4 @@
 <!-- PROJECT LOGO -->
-<br />
 <div align="center">
   <h3 align="center">Docker Laravel MySQL Nginx Starter</h3>
   <p align="center">
@@ -47,6 +46,7 @@ Follow the instructions below to set up your project.
 - Run command ```sudo docker exec -it php /bin/sh``` on your terminal
 - Run command ```composer create-project laravel/laravel ./``` on your terminal after going into the php container on docker
 - Run command ```composer install``` on your terminal after going into the php container on docker
+- Run command ```cp .env.example .env```
 - Run command ```chmod -R 777 storage``` on your terminal after going into the php container on docker
 - Run command ```chmod 777 database/database.sqlite``` on your terminal after going into the php container on docker
 - Run command ```php artisan key:generate```
