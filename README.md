@@ -9,14 +9,6 @@
   </p>
 </div>
 
-<div align="center">
-
-  <a href="">[![Contributors][contributors-shield]][contributors-url]</a>
-  <a href="">[![Stargazers][stars-shield]][stars-url]</a>
-  <a href="">[![Issues][issues-shield]][issues-url]</a>
-
-</div>
-
 <!-- ABOUT THE PROJECT -->
 ## Features
 
