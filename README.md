@@ -44,7 +44,6 @@ Follow the instructions below to set up your project.
 - Run command ```cd laravel-docker-compose-nginx-mysql``` on your terminal
 - Run command ```sudo docker compose up -d --build``` on your terminal
 - Run command ```sudo docker exec -it php /bin/sh``` on your terminal
-- Run command ```composer create-project laravel/laravel ./``` on your terminal after going into the php container on docker
 - Run command ```composer install``` on your terminal after going into the php container on docker
 - Run command ```cp .env.example .env```
 - Run command ```chmod -R 777 storage``` on your terminal after going into the php container on docker
