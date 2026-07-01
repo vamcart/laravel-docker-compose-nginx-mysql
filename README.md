@@ -49,6 +49,7 @@ Follow the instructions below to set up your project.
 - Run command ```chmod -R 777 storage``` on your terminal after going into the php container on docker
 - Run command ```php artisan key:generate```
 - Run command ```php artisan migrate```
+- Run command ```chmod 777 ./database/database.sqlite``` on your terminal after going into the php container on docker
 - To run artisan commands like migrate, etc. go to php container using ```docker exec -it php /bin/sh```
 - Go to http://localhost:8001 or any port you set to open Laravel
 
