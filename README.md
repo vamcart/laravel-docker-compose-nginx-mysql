@@ -43,7 +43,7 @@ Follow the instructions below to set up your project.
 - Run command ```git clone git@github.com:vamcart/laravel-docker-compose-nginx-mysql.git``` on your terminal
 - Run command ```cd laravel-docker-compose-nginx-mysql``` on your terminal
 - Run command ```sudo docker compose up -d --build``` on your terminal
-- Run command ```sudo docker exec -it php /bin/sh``` on your terminal
+- Run command ```sudo docker exec -it laravel-app-php /bin/sh``` on your terminal
 - Run command ```composer install``` on your terminal after going into the php container on docker
 - Run command ```cp .env.example .env```
 - Run command ```chmod -R 777 storage``` on your terminal after going into the php container on docker
