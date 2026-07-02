@@ -1,67 +1,55 @@
-networks: 
-    laravel:
-        driver: bridge
+FROM php:8.3-fpm-alpine
 
-services: 
-    nginx:
-        image: nginx:alpine
-        container_name: "${COMPOSE_PROJECT_NAME}-nginx"
-        restart: unless-stopped
-        tty: true
-        ports:
-            - "${HOST_MACHINE_UNSECURE_HOST_PORT}:8001"
-        volumes: 
-            - ./src:/var/www/app
-            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-        environment:
-              XDEBUG_CONFIG: "client_host=host.docker.internal remote_port=${XDEBUG_PORT}"
-              VAR_DUMPER_SERVER: buggregator:9912
-              RAY_HOST: buggregator
-              RAY_PORT: 8005
-        depends_on: 
-            - php
-            - mysql
-        networks: 
-            - laravel
+WORKDIR /var/www/app
 
-    mysql:
-        platform: linux/amd64
-        image: mysql
-        container_name: "${COMPOSE_PROJECT_NAME}-mysql"
-        restart: unless-stopped
-        tty: true
-        ports: 
-            - "${MYSQL_HOST_PORT}:${MYSQL_DOCKER_CONTAINER_PORT}"
-        volumes: 
-            - ./mysql:/var/lib/mysql
-        environment: 
-            MYSQL_DATABASE: laravel_docker
-            MYSQL_USER: user
-            MYSQL_PASSWORD: user
-            MYSQL_ROOT_PASSWORD: root
-            SERVICE_TAGS: dev
-            SERVICE_NAME: mysql
-        networks: 
-            - laravel
-    php:
-        build: ./php
-        container_name: "${COMPOSE_PROJECT_NAME}-php"
-        restart: unless-stopped
-        tty: true
-        working_dir: /var/www/app
-        volumes: 
-            - ./src:/var/www/app
-        ports: 
-            - "${PHP_HOST_PORT}:${PHP_DOCKER_CONTAINER_PORT}"
-        networks: 
-            - laravel    
-    buggregator:
-        image: ghcr.io/buggregator/server:latest
-        container_name: ${COMPOSE_PROJECT_NAME}-buggregator-server
-        ports:
-            - "8005:8000"       # Web UI, Sentry, Ray, Inspector
-            - "1025:1025"       # SMTP Fake Mail Server
-            - "9912:9912"       # Symfony VarDumper Server
-            - "9913:9913"       # Monolog Socket      
-        networks: 
-            - laravel
+RUN apk update && apk add \
+    curl \
+    linux-headers \
+    libpng-dev \
+    libxml2-dev \
+    unzip
+
+RUN apk add --no-cache zip libzip-dev
+
+RUN docker-php-ext-install pdo pdo_mysql \
+    && apk --no-cache add nodejs npm
+
+RUN apk add --no-cache \
+		$PHPIZE_DEPS \
+		openssl-dev \
+		icu \
+		icu-dev \
+		zlib-dev 
+
+# xhprof    
+RUN pecl install xhprof && \
+    docker-php-ext-enable \  
+    xhprof 
+
+# Устанавливаем расширение opentelemetry для PHP
+RUN pecl install opentelemetry \
+    && docker-php-ext-enable opentelemetry
+
+
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+USER root
+
+RUN chmod 777 -R /var/www/app
+
+# Install xdebug
+RUN pecl install xdebug-3.5.3 && \
+    docker-php-ext-enable xdebug && \
+    mkdir /var/log/xdebug
+
+# Other PHP Extensions
+
+RUN docker-php-ext-install -j$(nproc) intl && \
+    docker-php-ext-install exif  && \
+    docker-php-ext-install zip 
+
+# Enable PHP Extentions    
+#RUN docker-php-ext-enable zip
+
+
+#COPY  ./php/xdebug-nginx.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
